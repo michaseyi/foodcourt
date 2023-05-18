@@ -1,68 +1,26 @@
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	ManyToMany,
-	JoinTable,
-	PrimaryColumn,
-} from "typeorm"
+import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn } from "typeorm"
+import { BaseEntity } from "./BaseEntity"
 
 @Entity()
-export class User {
-	@PrimaryColumn()
+export class User extends BaseEntity {
+	@PrimaryColumn({ length: 40 })
 	id: string
 
-	@Column()
+	@Column({ length: 40 })
 	firstName: string
 
-	@Column()
+	@Column({ length: 40 })
 	lastName: string
 
-	@Column({ unique: true })
+	@Column({ unique: true, length: 20 })
 	phoneNuber: string
 
-	@Column({ nullable: true, unique: true })
+	@Column({ nullable: true, unique: true, length: 40 })
 	email: string
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, type: "blob" })
 	profilePicture: string
 
-	@Column({ default: 0, type: "double" })
+	@Column({ default: 0, type: "decimal", precision: 12, scale: 2, unsigned: true })
 	walletBalance: number
-
-	@ManyToMany(() => User, (user) => user.followings)
-	@JoinTable({
-		name: "follower_followee",
-		joinColumn: {
-			name: "followeeId",
-			referencedColumnName: "id",
-		},
-
-		inverseJoinColumn: {
-			name: "followerId",
-			referencedColumnName: "id",
-		},
-	})
-	followers: User[] = []
-
-	@ManyToMany(() => User, (user) => user.followers)
-	followings: User[] = []
-
-	@ManyToMany(() => User, (user) => user.subscribees)
-	@JoinTable({
-		name: "subscriber_subscribee",
-		joinColumn: {
-			name: "subscribeeId",
-			referencedColumnName: "id",
-		},
-
-		inverseJoinColumn: {
-			name: "subscriberId",
-			referencedColumnName: "id",
-		},
-	})
-	subscribers: User[] = []
-
-	@ManyToMany(() => User, (user) => user.subscribers)
-	subscribees: User[] = []
 }

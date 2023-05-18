@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryColumn } from "typeorm"
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
+import { BaseEntity } from "./BaseEntity"
+import { Product } from "./Product"
 
 @Entity()
-export class Brand {
+export class Brand extends BaseEntity {
 	@PrimaryColumn()
 	id: string
 
@@ -16,4 +18,7 @@ export class Brand {
 
 	@Column()
 	email: string
+
+	@OneToMany(() => Product, (product) => product.brand)
+	products: Product[]
 }
