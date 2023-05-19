@@ -2,8 +2,12 @@ import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { User } from "./entity/User"
 import DbConfig from "./config/database"
-import { Product, ProductOption } from "./entity/Product"
-import { Brand } from "./entity/Brand"
+import { Product } from "./entity/Product"
+import { Shop } from "./entity/Shop"
+import { ProductCategory } from "./entity/ProductCategory"
+import { ProductSubCategory } from "./entity/ProductSubCategory"
+import { UserTransaction } from "./entity/UserTransaction"
+import { ShopTransaction } from "./entity/ShopTransaction"
 
 const dbConfig = DbConfig.retrieve()
 export const AppDataSource = new DataSource({
@@ -15,7 +19,15 @@ export const AppDataSource = new DataSource({
 	database: dbConfig.dbName,
 	synchronize: true,
 	logging: false,
-	entities: [User, Product, Brand, ProductOption],
+	entities: [
+		User,
+		Product,
+		Shop,
+		ProductCategory,
+		ProductSubCategory,
+		UserTransaction,
+		ShopTransaction,
+	],
 	migrations: [],
 	subscribers: [],
 })

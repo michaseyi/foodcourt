@@ -1,4 +1,4 @@
-import * as assert from "assert"
+import assert from "assert"
 
 export default class DbConfig {
 	private static instance: DbConfig | null = null
@@ -16,7 +16,7 @@ export default class DbConfig {
 		}
 		const dbHost = process.env.DB_HOST
 		assert(typeof dbHost === "string", "Database host not set")
-		const dbPort = +process.env.DB_PORT
+		const dbPort = +String(process.env.DB_PORT)
 		assert(Number.isInteger(dbPort), "Database port not set or not a number")
 		const dbUser = process.env.DB_USER
 		assert(typeof dbUser === "string", "Database user not set")

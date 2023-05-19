@@ -6,12 +6,8 @@ import { StatusCodes } from "http-status-codes"
 import { randomUUID } from "crypto"
 
 export class UserRepository {
-	static async create(firstName: string, lastName: string, phoneNumber: string) {
-		const user = new User()
-		user.id = randomUUID()
-		user.firstName = firstName
-		user.lastName = lastName
-		user.phoneNuber = phoneNumber
+	static async create(phoneNumber: string) {
+		const user = new User(phoneNumber)
 		try {
 			return await AppDataSource.getRepository(User).save(user)
 		} catch (err) {

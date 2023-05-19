@@ -1,30 +1,31 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
-import { Brand } from "./Brand"
+import { Shop } from "./Shop"
+import { ProductCategory } from "./ProductCategory"
+import { ProductSubCategory } from "./ProductSubCategory"
 
 @Entity()
 export class Product extends BaseEntity {
-	@PrimaryColumn()
-	id: string
-
 	@Column()
 	name: string
 
-	@ManyToOne(() => Brand, (brand) => brand.products)
-	brand: Brand
+	@Column({ type: "decimal", precision: 10, scale: 2, unsigned: true })
+	basePrice: number
 
-	@OneToMany(() => ProductOption, (productOption) => productOption.product)
-	options: ProductOption[]
-}
+	@ManyToOne(() => Shop, (shop) => shop.products, { nullable: false })
+	shop?: Shop
 
-@Entity()
-export class ProductOption extends BaseEntity {
-	@ManyToOne(() => Product, (product) => product.options)
-	product: Product
+	@ManyToOne(() => ProductCategory, (category) => category.products, { nullable: false })
+	category?: ProductCategory
 
-	@PrimaryColumn()
-	name: string
+	@ManyToOne(() => ProductSubCategory, (subCategory) => subCategory.products)
+	subCategory?: ProductSubCategory
 
-	@Column({ type: "decimal", precision: 12, scale: 2, unsigned: true })
-	additionalPrice: number
+	constructor(name: string, basePrice: number, shop: Shop, category: ProductCategory) {
+		super()
+		this.name = name
+		this.basePrice = basePrice
+		this.shop = shop
+		this.category = category
+	}
 }
