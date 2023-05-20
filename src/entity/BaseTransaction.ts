@@ -1,16 +1,11 @@
 import { BaseEntity } from "./BaseEntity"
 import { Column } from "typeorm"
-import { TransactionStatus, TransactionType } from "../types/Transactions"
+import { TransactionStatus, TransactionType } from "../types/Transaction"
 
 export class BaseTransaction extends BaseEntity {
 	@Column({
 		type: "enum",
-		enum: [
-			TransactionStatus.FAILED,
-			TransactionStatus.COMPLETED,
-			TransactionStatus.CANCELLED,
-			TransactionStatus.PENDING,
-		],
+		enum: Object.values(TransactionStatus),
 	})
 	status: TransactionStatus
 
@@ -19,7 +14,7 @@ export class BaseTransaction extends BaseEntity {
 
 	@Column({
 		type: "enum",
-		enum: [TransactionType.DEPOSIT, TransactionType.PURCHASE, TransactionType.WITHDRAWAL],
+		enum: Object.values(TransactionType),
 	})
 	type: TransactionType
 

@@ -1,13 +1,15 @@
 import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn, OneToMany } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
+import { GroupOrder } from "./GroupOrder"
+import { Order } from "./Order"
 import { UserTransaction } from "./UserTransaction"
 
 @Entity()
 export class User extends BaseEntity {
-	@Column({ length: 40 })
+	@Column({ length: 40, nullable: true })
 	firstName?: string
 
-	@Column({ length: 40 })
+	@Column({ length: 40, nullable: true })
 	lastName?: string
 
 	@Column({ unique: true, length: 20 })
@@ -24,6 +26,12 @@ export class User extends BaseEntity {
 
 	@OneToMany(() => UserTransaction, (transaction) => transaction.user)
 	transactions?: UserTransaction[]
+
+	@OneToMany(() => Order, (order) => order.owner)
+	orders?: Order[]
+
+	@OneToMany(() => GroupOrder, (groupOrder) => groupOrder.owner)
+	groupOrders?: GroupOrder
 
 	constructor(phoneNumber: string) {
 		super()

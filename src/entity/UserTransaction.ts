@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne } from "typeorm"
 
-import { TransactionType } from "../types/Transactions"
+import { TransactionType } from "../types/Transaction"
 import { BaseTransaction } from "./BaseTransaction"
 import { User } from "./User"
 

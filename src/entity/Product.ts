@@ -1,8 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from "typeorm"
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
 import { Shop } from "./Shop"
 import { ProductCategory } from "./ProductCategory"
 import { ProductSubCategory } from "./ProductSubCategory"
+import { ProductOption } from "./ProductOption"
+import { OrderItem } from "./OrderItem"
 
 @Entity()
 export class Product extends BaseEntity {
@@ -11,6 +13,9 @@ export class Product extends BaseEntity {
 
 	@Column({ type: "decimal", precision: 10, scale: 2, unsigned: true })
 	basePrice: number
+
+	@Column({ type: "int" })
+	quantity: number
 
 	@ManyToOne(() => Shop, (shop) => shop.products, { nullable: false })
 	shop?: Shop
@@ -21,11 +26,24 @@ export class Product extends BaseEntity {
 	@ManyToOne(() => ProductSubCategory, (subCategory) => subCategory.products)
 	subCategory?: ProductSubCategory
 
-	constructor(name: string, basePrice: number, shop: Shop, category: ProductCategory) {
+	@OneToMany(() => ProductOption, (productOption) => productOption.product)
+	options?: ProductOption[]
+
+	@OneToMany(() => OrderItem, (orderItem) => orderItem.product)
+	salesLog?: OrderItem[]
+
+	constructor(
+		name: string,
+		basePrice: number,
+		shop: Shop,
+		category: ProductCategory,
+		quantity: number
+	) {
 		super()
 		this.name = name
 		this.basePrice = basePrice
 		this.shop = shop
+		this.quantity = quantity
 		this.category = category
 	}
 }

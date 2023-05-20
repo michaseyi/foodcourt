@@ -1,7 +1,6 @@
 import { CreateDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm"
 import { randomUUID } from "crypto"
 
-
 export class BaseEntity {
 	@CreateDateColumn({ type: "timestamp" })
 	created_at!: Date
@@ -9,7 +8,7 @@ export class BaseEntity {
 	@UpdateDateColumn({ type: "timestamp" })
 	updated_at!: Date
 
-	@PrimaryColumn({ length: 20 })
+	@PrimaryColumn({ length: 50 })
 	id: string
 
 	constructor() {

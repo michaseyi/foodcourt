@@ -1,12 +1,17 @@
-import { Entity, ManyToOne } from "typeorm"
-import { TransactionType } from "../types/Transactions"
+import { Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
+import { TransactionType } from "../types/Transaction"
 import { BaseTransaction } from "./BaseTransaction"
+import { OrderItem } from "./OrderItem"
 import { Shop } from "./Shop"
 
 @Entity()
 export class ShopTransaction extends BaseTransaction {
-	@ManyToOne(() => Shop, (shop) => shop.transactions)
-	shop: Shop
+	@ManyToOne(() => Shop, (shop) => shop.transactions, { nullable: false })
+	shop?: Shop
+
+	@OneToOne(() => OrderItem)
+	@JoinColumn()
+	order?: OrderItem
 
 	constructor(amount: number, type: TransactionType, shop: Shop) {
 		super(amount, type)

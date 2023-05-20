@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
+import { Column, Entity, OneToMany } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
 import { Product } from "./Product"
 import { ProductCategory } from "./ProductCategory"
@@ -9,16 +9,19 @@ export class Shop extends BaseEntity {
 	@Column()
 	name: string
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, unique: true })
 	instagramHandle?: string
 
-	@Column()
+	@Column({ unique: true })
 	phoneNumber: string
 
 	@Column()
 	password: string
 
-	@Column()
+	@Column({ default: 0, type: "decimal", precision: 10, scale: 2, unsigned: true })
+	walletBalance: number
+
+	@Column({ unique: true })
 	email: string
 
 	@OneToMany(() => ProductCategory, (category) => category.shop)
@@ -36,5 +39,6 @@ export class Shop extends BaseEntity {
 		this.phoneNumber = phoneNumber
 		this.email = email
 		this.password = password
+		this.walletBalance = 0
 	}
 }
