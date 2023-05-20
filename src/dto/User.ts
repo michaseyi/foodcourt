@@ -1,8 +1,8 @@
 export enum UserUpdateDataFields {
-	FIRSTNAME = "firstName",
-	LASTNAME = "lastName",
+	FIRST_NAME = "firstName",
+	LAST_NAME = "lastName",
 	EMAIL = "email",
-	PHONENUMBER = "phoneNumber",
+	PHONE_NUMBER = "phoneNumber",
 	PROFILE_PICTURE = "profilePicture",
 }
 export type UserUpdateData = {

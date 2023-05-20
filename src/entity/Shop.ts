@@ -1,8 +1,10 @@
+import BigNumber from "bignumber.js"
 import { Column, Entity, OneToMany } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
 import { Product } from "./Product"
 import { ProductCategory } from "./ProductCategory"
 import { ShopTransaction } from "./ShopTransaction"
+import { bigNumberTransformer } from "./transformers/BigNumberTransformer"
 
 @Entity()
 export class Shop extends BaseEntity {
@@ -18,8 +20,8 @@ export class Shop extends BaseEntity {
 	@Column()
 	password: string
 
-	@Column({ default: 0, type: "decimal", precision: 10, scale: 2, unsigned: true })
-	walletBalance: number
+	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	walletBalance: BigNumber
 
 	@Column({ unique: true })
 	email: string
@@ -39,6 +41,6 @@ export class Shop extends BaseEntity {
 		this.phoneNumber = phoneNumber
 		this.email = email
 		this.password = password
-		this.walletBalance = 0
+		this.walletBalance = new BigNumber(0)
 	}
 }

@@ -1,7 +1,9 @@
-import { Entity, Column, ManyToMany, JoinTable, PrimaryColumn, OneToMany } from "typeorm"
+import BigNumber from "bignumber.js"
+import { Entity, Column, OneToMany } from "typeorm"
 import { BaseEntity } from "./BaseEntity"
 import { GroupOrder } from "./GroupOrder"
 import { Order } from "./Order"
+import { bigNumberTransformer } from "./transformers/BigNumberTransformer"
 import { UserTransaction } from "./UserTransaction"
 
 @Entity()
@@ -21,8 +23,8 @@ export class User extends BaseEntity {
 	@Column({ nullable: true, type: "blob" })
 	profilePicture?: string
 
-	@Column({ default: 0, type: "decimal", precision: 10, scale: 2, unsigned: true })
-	walletBalance: number
+	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	walletBalance: BigNumber
 
 	@OneToMany(() => UserTransaction, (transaction) => transaction.user)
 	transactions?: UserTransaction[]
@@ -36,6 +38,6 @@ export class User extends BaseEntity {
 	constructor(phoneNumber: string) {
 		super()
 		this.phoneNumber = phoneNumber
-		this.walletBalance = 0
+		this.walletBalance = new BigNumber(0)
 	}
 }

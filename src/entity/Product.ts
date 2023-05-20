@@ -5,14 +5,16 @@ import { ProductCategory } from "./ProductCategory"
 import { ProductSubCategory } from "./ProductSubCategory"
 import { ProductOption } from "./ProductOption"
 import { OrderItem } from "./OrderItem"
+import { bigNumberTransformer } from "./transformers/BigNumberTransformer"
+import BigNumber from "bignumber.js"
 
 @Entity()
 export class Product extends BaseEntity {
 	@Column()
 	name: string
 
-	@Column({ type: "decimal", precision: 10, scale: 2, unsigned: true })
-	basePrice: number
+	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	basePrice: BigNumber
 
 	@Column({ type: "int" })
 	quantity: number
@@ -34,7 +36,7 @@ export class Product extends BaseEntity {
 
 	constructor(
 		name: string,
-		basePrice: number,
+		basePrice: BigNumber,
 		shop: Shop,
 		category: ProductCategory,
 		quantity: number

@@ -3,11 +3,39 @@ env.config()
 import { connectToDb } from "../../database/connection"
 import { UserRepository } from "../../repositories/UserRepository"
 
-test("Created user should exist in the database", async () => {
-	const source = await connectToDb()
-	const user = await UserRepository.create("11")
+beforeAll(async () => {
+	await connectToDb()
+}, 10000000)
 
-	const fetchedUser = await UserRepository.find(user.id)
-	source.destroy()
-	expect("11").toBe(fetchedUser?.phoneNumber)
+afterAll(async () => {
+	await (await connectToDb()).destroy()
+}, 1000000)
+
+test("Created user should exist in the database", async () => {
+	const user = await UserRepository.create("20")
+
+	const fetchedUser = await UserRepository.findOne(user.id)
+
+	expect(fetchedUser?.id).toBe(user.id)
+})
+
+test("User should be updated in the database", async () => {
+	const user = await UserRepository.create("30")
+
+	await UserRepository.update(user.id, { firstName: "Michael", lastName: "Adewole" })
+
+	const fetchedUser = await UserRepository.findOne(user.id)
+
+	expect("Michael").toBe(fetchedUser?.firstName)
+	expect("Adewole").toBe(fetchedUser?.lastName)
+})
+
+test("Should not update secured fields", async () => {
+	const user = await UserRepository.create("40")
+
+	await UserRepository.update(user.id, { phoneNumber: "100" })
+
+	const fetchedUser = await UserRepository.findOne(user.id)
+
+	expect("40").toBe(fetchedUser?.phoneNumber)
 })

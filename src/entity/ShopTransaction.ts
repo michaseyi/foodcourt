@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js"
 import { Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm"
 import { TransactionType } from "../types/Transaction"
 import { BaseTransaction } from "./BaseTransaction"
@@ -13,7 +14,7 @@ export class ShopTransaction extends BaseTransaction {
 	@JoinColumn()
 	order?: OrderItem
 
-	constructor(amount: number, type: TransactionType, shop: Shop) {
+	constructor(amount: BigNumber, type: TransactionType, shop: Shop) {
 		super(amount, type)
 		this.shop = shop
 	}
