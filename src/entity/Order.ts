@@ -18,7 +18,13 @@ export class Order extends BaseEntity {
 	@OneToMany(() => OrderItem, (orderItem) => orderItem.order)
 	orderItems?: OrderItem[]
 
-	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	@Column({
+		type: "decimal",
+		precision: 10,
+		scale: 2,
+		transformer: bigNumberTransformer,
+		unsigned: true,
+	})
 	totalPrice: BigNumber
 
 	@Column({ type: "enum", enum: Object.values(OrderStatus) })

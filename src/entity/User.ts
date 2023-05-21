@@ -23,7 +23,13 @@ export class User extends BaseEntity {
 	@Column({ nullable: true, type: "blob" })
 	profilePicture?: string
 
-	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	@Column({
+		type: "decimal",
+		precision: 10,
+		scale: 2,
+		unsigned: true,
+		transformer: bigNumberTransformer,
+	})
 	walletBalance: BigNumber
 
 	@OneToMany(() => UserTransaction, (transaction) => transaction.user)

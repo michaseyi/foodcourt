@@ -6,7 +6,7 @@ import { Shop } from "./Shop"
 
 @Entity()
 export class ProductCategory extends BaseEntity {
-	@Column()
+	@Column({ unique: true })
 	name: string
 
 	@ManyToOne(() => Shop, (shop) => shop.productCategories, { nullable: false })

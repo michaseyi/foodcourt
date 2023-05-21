@@ -23,6 +23,7 @@ export const AppDataSource = new DataSource({
 	password: dbConfig.dbPassword,
 	database: dbConfig.dbName,
 	synchronize: true,
+	poolSize: 10,
 	logging: false,
 	entities: [
 		User,

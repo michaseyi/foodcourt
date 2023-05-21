@@ -14,10 +14,16 @@ export class OrderItem extends BaseEntity {
 	@ManyToOne(() => Product, (product) => product.salesLog, { nullable: false })
 	product?: Product
 
-	@Column({ type: "int" })
+	@Column({ type: "int", unsigned: true })
 	quantity: number
 
-	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	@Column({
+		type: "decimal",
+		precision: 10,
+		scale: 2,
+		transformer: bigNumberTransformer,
+		unsigned: true,
+	})
 	totalPrice: BigNumber
 
 	@ManyToMany(() => ProductOptionValue, (productOptionValue) => productOptionValue.salesLog)

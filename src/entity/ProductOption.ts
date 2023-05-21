@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm"
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from "typeorm"
 import { ProductOptionType } from "../types/Product"
 import { BaseEntity } from "./BaseEntity"
 import { Product } from "./Product"
@@ -6,7 +6,7 @@ import { ProductOptionValue } from "./ProductOptionValue"
 
 @Entity()
 export class ProductOption extends BaseEntity {
-	@Column()
+	@Column({ unique: true })
 	name: string
 
 	@Column({ type: "enum", enum: Object.values(ProductOptionType) })
@@ -18,7 +18,9 @@ export class ProductOption extends BaseEntity {
 	@ManyToOne(() => Product, (product) => product.options, { nullable: false })
 	product: Product
 
-	@OneToMany(() => ProductOptionValue, (productOptionValue) => productOptionValue.productOption)
+	@ManyToMany(() => ProductOptionValue, (productOptionValue) => productOptionValue.productOption, {
+		eager: true,
+	})
 	optionValues?: ProductOptionValue[]
 
 	constructor(type: ProductOptionType, name: string, product: Product, isImportant: boolean) {

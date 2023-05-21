@@ -5,14 +5,24 @@ import { StatusCodes } from "http-status-codes"
 import { UserUpdateData, UserUpdateDataFields } from "../dto/User"
 import { WalletUpdateType } from "../types/User"
 import BigNumber from "bignumber.js"
+import { EntityManager } from "typeorm"
 
 export class UserRepository {
 	static source = AppDataSource.getRepository(User)
 
-	static async create(phoneNumber: string): Promise<User> {
+	static getSource(trxManager: EntityManager | null) {
+		if (trxManager) {
+			return trxManager.getRepository(User)
+		}
+		return this.source
+	}
+
+	static async create(trxManager: EntityManager | null, phoneNumber: string): Promise<User> {
+		const source = this.getSource(trxManager)
+
 		const user = new User(phoneNumber)
 		try {
-			return await this.source.save(user)
+			return await source.save(user)
 		} catch (err) {
 			throw new ApiError(
 				"An unexpected error occured. Pleas try again later.",
@@ -21,14 +31,20 @@ export class UserRepository {
 		}
 	}
 
-	static async findOne(id?: string, phoneNumber?: string, email?: string): Promise<User | null> {
+	static async findOne(
+		trxManager: EntityManager | null,
+		id?: string,
+		phoneNumber?: string,
+		email?: string
+	): Promise<User | null> {
+		const source = this.getSource(trxManager)
 		try {
 			if (id) {
-				return await this.source.findOneBy({ id })
+				return await source.findOneBy({ id })
 			} else if (phoneNumber) {
-				return await this.source.findOneBy({ phoneNumber })
+				return await source.findOneBy({ phoneNumber })
 			} else if (email) {
-				return await this.source.findOneBy({ email })
+				return await source.findOneBy({ email })
 			}
 		} catch (err) {
 			throw new ApiError(
@@ -39,8 +55,14 @@ export class UserRepository {
 		return null
 	}
 
-	static async update(userId: string, updateObject: UserUpdateData) {
-		const user = await this.findOne(userId)
+	static async update(
+		trxManager: EntityManager | null,
+		userId: string,
+		updateObject: UserUpdateData
+	) {
+		const source = this.getSource(trxManager)
+
+		const user = await this.findOne(trxManager, userId)
 
 		if (!user) {
 			return null
@@ -58,11 +80,17 @@ export class UserRepository {
 			}
 		})
 
-		return await this.source.save(user)
+		return await source.save(user)
 	}
 
-	static async updateSecureFields(userId: string, updateObject: UserUpdateData) {
-		const user = await this.findOne(userId)
+	static async updateSecureFields(
+		trxManager: EntityManager | null,
+		userId: string,
+		updateObject: UserUpdateData
+	) {
+		const source = this.getSource(trxManager)
+
+		const user = await this.findOne(trxManager, userId)
 
 		if (!user) {
 			return null
@@ -79,14 +107,21 @@ export class UserRepository {
 			}
 		})
 
-		return await this.source.save(user)
+		return await source.save(user)
 	}
 
-	static async updateWallet(userId: string, amount: BigNumber, type: WalletUpdateType) {
+	static async updateWallet(
+		trxManager: EntityManager | null,
+		userId: string,
+		amount: BigNumber,
+		type: WalletUpdateType
+	) {
+		const source = this.getSource(trxManager)
+
 		if (amount.isLessThanOrEqualTo(0)) {
 			throw new ApiError(`Update amount cannot be zero or less`, StatusCodes.CONFLICT)
 		}
-		const user = await this.findOne(userId)
+		const user = await this.findOne(trxManager, userId)
 
 		if (!user) {
 			return null
@@ -103,6 +138,6 @@ export class UserRepository {
 				}
 				user.walletBalance = user.walletBalance.minus(amount)
 		}
-		return await this.source.save(user)
+		return await source.save(user)
 	}
 }

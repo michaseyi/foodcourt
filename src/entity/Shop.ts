@@ -14,13 +14,19 @@ export class Shop extends BaseEntity {
 	@Column({ nullable: true, unique: true })
 	instagramHandle?: string
 
-	@Column({ unique: true })
-	phoneNumber: string
+	@Column({ unique: true, nullable: true })
+	phoneNumber?: string
 
 	@Column()
 	password: string
 
-	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	@Column({
+		type: "decimal",
+		precision: 10,
+		scale: 2,
+		unsigned: true,
+		transformer: bigNumberTransformer,
+	})
 	walletBalance: BigNumber
 
 	@Column({ unique: true })
@@ -35,10 +41,9 @@ export class Shop extends BaseEntity {
 	@OneToMany(() => ShopTransaction, (transaction) => transaction.shop)
 	transactions?: ShopTransaction[]
 
-	constructor(name: string, phoneNumber: string, email: string, password: string) {
+	constructor(name: string, email: string, password: string) {
 		super()
 		this.name = name
-		this.phoneNumber = phoneNumber
 		this.email = email
 		this.password = password
 		this.walletBalance = new BigNumber(0)

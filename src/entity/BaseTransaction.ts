@@ -11,7 +11,13 @@ export class BaseTransaction extends BaseEntity {
 	})
 	status: TransactionStatus
 
-	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	@Column({
+		type: "decimal",
+		precision: 10,
+		scale: 2,
+		unsigned: true,
+		transformer: bigNumberTransformer,
+	})
 	amount: BigNumber
 
 	@Column({

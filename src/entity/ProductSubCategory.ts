@@ -5,7 +5,7 @@ import { ProductCategory } from "./ProductCategory"
 
 @Entity()
 export class ProductSubCategory extends BaseEntity {
-	@Column()
+	@Column({ unique: true })
 	name: string
 
 	@OneToMany(() => Product, (product) => product.category)

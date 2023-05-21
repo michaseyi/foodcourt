@@ -13,10 +13,16 @@ export class Product extends BaseEntity {
 	@Column()
 	name: string
 
-	@Column({ type: "decimal", precision: 10, scale: 2, transformer: bigNumberTransformer })
+	@Column({
+		type: "decimal",
+		precision: 10,
+		scale: 2,
+		transformer: bigNumberTransformer,
+		unsigned: true,
+	})
 	basePrice: BigNumber
 
-	@Column({ type: "int" })
+	@Column({ type: "int", unsigned: true })
 	quantity: number
 
 	@ManyToOne(() => Shop, (shop) => shop.products, { nullable: false })
